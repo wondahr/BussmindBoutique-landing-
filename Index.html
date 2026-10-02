@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Boutique — Visit Us Online or In-Store</title>
+<meta name="description" content="Timeless pieces, thoughtfully made. Shop online or visit our boutique.">
+
+<!-- Social sharing -->
+<meta property="og:title" content="Your Boutique">
+<meta property="og:description" content="Shop online or visit our boutique.">
+<meta property="og:type" content="website">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:         #0e0e0e;
+  --text:       #ffffff;
+  --muted:      rgba(255,255,255,0.72);
+  --accent:     #c9a877;
+  --max-width:  1300px;
+  --font-head:  'Playfair Display', Georgia, serif;
+  --font-body:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+/* ============================================================
+   FIXED HEADER
+   ============================================================ */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 24px 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+  transition: background 0.3s ease, padding 0.3s ease;
+}
+.header.scrolled {
+  background: rgba(14,14,14,0.92);
+  backdrop-filter: blur(10px);
+  padding: 16px 0;
+}
+.header__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.logo {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.nav { display: flex; gap: 32px; }
+.nav a {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--muted);
+  transition: color 0.25s ease;
+}
+.nav a:hover { color: #fff; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 640px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* --- Video background --- */
+.hero__video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.hero__video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- Sliding image layer (sits over video, cross-fades) --- */
+.hero__slides {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.6s ease-in-out;
+  will-change: opacity;
+}
+.hero__slide.active { opacity: 1; }
+.hero__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- Dark gradient overlay for text legibility --- */
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.65) 100%);
+}
+
+/* --- Hero content --- */
+.hero__content {
+  position: relative;
+  z-index: 3;
+  max-width: 900px;
+  padding: 0 24px;
+}
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--accent);
+  margin: 0 0 24px;
+}
+.hero__heading {
+  font-family: var(--font-head);
+  font-size: clamp(40px, 7vw, 88px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin: 0 0 24px;
+}
+.hero__sub {
+  font-size: clamp(15px, 1.2vw, 18px);
+  font-weight: 300;
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto 44px;
+}
+.hero__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* --- Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 36px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 0;
+  text-decoration: none;
+}
+.btn--primary {
+  background: #fff;
+  color: #0e0e0e;
+  border-color: #fff;
+}
+.btn--primary:hover {
+  background: transparent;
+  color: #fff;
+}
+.btn--ghost {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255,255,255,0.5);
+}
+.btn--ghost:hover {
+  background: #fff;
+  color: #0e0e0e;
+  border-color: #fff;
+}
+.btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* --- Slide indicators (dots) --- */
+.hero__dots {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  gap: 12px;
+}
+.hero__dot {
+  width: 36px;
+  height: 2px;
+  background: rgba(255,255,255,0.35);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+.hero__dot:hover { background: rgba(255,255,255,0.6); }
+.hero__dot.active { background: rgba(255,255,255,0.35); }
+.hero__dot.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform-origin: left;
+  animation: dotFill 6s linear forwards;
+}
+@keyframes dotFill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* --- Scroll hint --- */
+.scroll-hint {
+  position: absolute;
+  bottom: 36px;
+  right: 40px;
+  z-index: 4;
+  writing-mode: vertical-rl;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.scroll-hint::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 48px;
+  background: rgba(255,255,255,0.4);
+  margin: 16px auto 0;
+  animation: scrollPulse 2.2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { transform: scaleY(1); opacity: 0.5; }
+  50%      { transform: scaleY(0.5); opacity: 1; }
+}
+
+/* ============================================================
+   VISIT SECTION (Online + In-Store)
+   ============================================================ */
+.visit {
+  padding: 120px 0;
+  background: #0e0e0e;
+}
+.visit__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.visit__heading {
+  font-family: var(--font-head);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-align: center;
+  margin: 0 0 16px;
+}
+.visit__sub {
+  text-align: center;
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 520px;
+  margin: 0 auto 72px;
+}
+.visit__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+.visit__card {
+  position: relative;
+  padding: 64px 48px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.02);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+.visit__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201,168,119,0.08) 0%, rgba(201,168,119,0) 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.visit__card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+}
+.visit__card:hover::before { opacity: 1; }
+.visit__card > * { position: relative; z-index: 1; }
+
+.visit__icon {
+  width: 48px;
+  height: 48px;
+  color: var(--accent);
+  margin-bottom: 28px;
+}
+.visit__icon svg { width: 100%; height: 100%; }
+
+.visit__label {
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 16px;
+}
+.visit__title {
+  font-family: var(--font-head);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.15;
+  margin: 0 0 16px;
+}
+.visit__text {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0 0 32px;
+  max-width: 380px;
+}
+.visit__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.visit__meta strong {
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.visit__arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 500;
+}
+.visit__arrow svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+.visit__card:hover .visit__arrow svg { transform: translateX(6px); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  padding: 48px 0 40px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  background: #0e0e0e;
+}
+.footer a { color: var(--muted); margin: 0 12px; transition: color 0.2s ease; }
+.footer a:hover { color: #fff; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .nav { display: none; }
+  .visit__grid { grid-template-columns: 1fr; }
+  .visit { padding: 88px 0; }
+  .visit__card { padding: 48px 32px; }
+  .scroll-hint { display: none; }
+}
+@media (max-width: 560px) {
+  .header { padding: 18px 0; }
+  .hero { min-height: 100vh; }
+  .hero__actions { flex-direction: column; width: 100%; }
+  .btn { width: 100%; justify-content: center; padding: 18px 24px; }
+  .hero__dots { bottom: 28px; }
+  .hero__dot { width: 24px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="header" id="header">
+  <div class="header__inner">
+    <a href="#" class="logo">Your Boutique</a>
+    <nav class="nav">
+      <a href="#visit">Visit</a>
+      <a href="#visit">Shop</a>
+      <a href="#visit">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============================================================
+     HERO — Video background + sliding images
+     ============================================================ -->
+<section class="hero" id="hero">
+
+  <!-- VIDEO LAYER (plays behind everything) -->
+  <div class="hero__video">
+    <video
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      poster="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=2000&q=80"
+      aria-hidden="true">
+      <!-- Replace with your own video file -->
+      <source src="https://cdn.coverr.co/videos/coverr-a-woman-walking-in-a-dress-4827/1080p.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- SLIDING IMAGE LAYER (cross-fades over the video) -->
+  <div class="hero__slides" id="slides">
+    <div class="hero__slide active">
+      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=2000&q=80" alt="Collection look 1">
+    </div>
+    <div class="hero__slide">
+      <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=2000&q=80" alt="Collection look 2">
+    </div>
+    <div class="hero__slide">
+      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=2000&q=80" alt="Collection look 3">
+    </div>
+  </div>
+
+  <!-- DARK OVERLAY -->
+  <div class="hero__overlay"></div>
+
+  <!-- CONTENT -->
+  <div class="hero__content">
+    <p class="eyebrow">New Collection · Autumn 2026</p>
+    <h1 class="hero__heading">Timeless pieces,<br>thoughtfully made</h1>
+    <p class="hero__sub">Elevated essentials for the modern wardrobe — crafted in small batches, made to last.</p>
+
+    <div class="hero__actions">
+      <!-- ⚠️ Replace href with your Shopify store URL -->
+      <a href="https://your-store.myshopify.com" class="btn btn--primary">
+        Shop Online
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </a>
+
+      <!-- ⚠️ Replace href with your Google Maps link -->
+      <a href="https://maps.google.com/?q=Your+Boutique+Address" target="_blank" rel="noopener" class="btn btn--ghost">
+        Visit Boutique
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- SLIDE DOTS -->
+  <div class="hero__dots" id="dots" role="tablist" aria-label="Hero slides"></div>
+
+  <!-- SCROLL HINT -->
+  <div class="scroll-hint" aria-hidden="true">Scroll</div>
+</section>
+
+<!-- ============================================================
+     VISIT SECTION — Online Store + Physical Store
+     ============================================================ -->
+<section class="visit" id="visit">
+  <div class="visit__inner">
+    <h2 class="visit__heading">Two ways to shop</h2>
+    <p class="visit__sub">Wherever you are, however you prefer — we've made it easy.</p>
+
+    <div class="visit__grid">
+
+      <!-- CARD 1: ONLINE STORE -->
+      <!-- ⚠️ Replace href with your Shopify store URL -->
+      <a href="https://your-store.myshopify.com" class="visit__card" target="_blank" rel="noopener">
+        <div class="visit__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </div>
+        <p class="visit__label">Online Store</p>
+        <h3 class="visit__title">Shop the full collection</h3>
+        <p class="visit__text">Browse every piece, read reviews, and check out securely — delivered to your door.</p>
+        <div class="visit__meta">
+          <span><strong>Free shipping</strong> on orders over $75</span>
+          <span><strong>30-day returns</strong> — no questions asked</span>
+        </div>
+        <span class="visit__arrow">
+          Shop Now
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </span>
+      </a>
+
+      <!-- CARD 2: PHYSICAL STORE -->
+      <!-- ⚠️ Replace href with your Google Maps link -->
+      <a href="https://maps.google.com/?q=Your+Boutique+Address" class="visit__card" target="_blank" rel="noopener">
+        <div class="visit__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <p class="visit__label">Boutique</p>
+        <h3 class="visit__title">Visit us in person</h3>
+        <p class="visit__text">Come see, touch, and try on the collection. Personal styling available on request.</p>
+        <div class="visit__meta">
+          <span><strong>123 Main Street</strong> · Your City</span>
+          <span><strong>Mon–Sat</strong> 10am – 7pm</span>
+          <span><strong>+1 (555) 123-4567</strong></span>
+        </div>
+        <span class="visit__arrow">
+          Get Directions
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <p>© 2026 Your Boutique · All rights reserved</p>
+  <p style="margin-top: 14px;">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Shipping</a>
+  </p>
+</footer>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script>
+(function () {
+
+  /* ---------- Hero image slider ---------- */
+  const slides = Array.from(document.querySelectorAll('.hero__slide'));
+  const dotsContainer = document.getElementById('dots');
+  const INTERVAL = 6000; // ms per slide
+  let current = 0;
+  let timer = null;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'hero__dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    dot.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(dot);
+  });
+  const dots = Array.from(dotsContainer.children);
+
+  function goTo(index) {
+    if (index === current) return;
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+
+    current = (index + slides.length) % slides.length;
+
+    slides[current].classList.add('active');
+    // Re-trigger the dot fill animation
+    const dot = dots[current];
+    dot.classList.remove('active');
+    void dot.offsetWidth; // force reflow
+    dot.classList.add('active');
+  }
+
+  function next() { goTo(current + 1); }
+
+  function start() { timer = setInterval(next, INTERVAL); }
+  function stop()  { clearInterval(timer); }
+
+  start();
+
+  // Pause when tab is hidden
+  document.addEventListener('visibilitychange', () => {
+    document.hidden ? stop() : start();
+  });
+
+  /* ---------- Header background on scroll ---------- */
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  /* ---------- Pause hero video when scrolled away (perf) ---------- */
+  const video = document.querySelector('.hero__video video');
+  const hero = document.querySelector('.hero');
+  if (video && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    }, { threshold: 0.1 });
+    io.observe(hero);
+  }
+
+})();
+</script>
+
+</body>
+  </html>
