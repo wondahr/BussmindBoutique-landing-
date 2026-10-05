@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0e0e0e">
-<title>Bussmind Boutique — Shop Online or Visit our Boutique</title>
+<title>Your Boutique — Visit Us Online or In-Store</title>
 <meta name="description" content="Timeless pieces, thoughtfully made. Shop online or visit our boutique.">
 
 <!-- Social sharing -->
-<meta property="og:title" content="Bussmind Boutique">
+<meta property="og:title" content="Your Boutique">
 <meta property="og:description" content="Shop online or visit our boutique.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="images/poster.jpg">
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +30,6 @@
   --max-width:  1300px;
   --font-head:  'Playfair Display', Georgia, serif;
   --font-body:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  /* Safe area for notched phones */
   --safe-top:    env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -48,7 +48,6 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Prevent tap highlight on mobile */
   -webkit-tap-highlight-color: transparent;
 }
 img, video { display: block; max-width: 100%; height: auto; }
@@ -56,10 +55,9 @@ a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; }
 
 /* ============================================================
-   FLUID SCALING UTILITY
+   FLUID TYPE SCALE
    ============================================================ */
 :root {
-  /* Fluid type scale using clamp() */
   --fs-hero:    clamp(34px, 7.2vw, 88px);
   --fs-section: clamp(26px, 4.4vw, 52px);
   --fs-card:    clamp(22px, 3vw, 32px);
@@ -69,7 +67,7 @@ button { font: inherit; color: inherit; }
 }
 
 /* ============================================================
-   FIXED HEADER
+   HEADER
    ============================================================ */
 .header {
   position: fixed;
@@ -101,11 +99,7 @@ button { font: inherit; color: inherit; }
   letter-spacing: 0.04em;
   white-space: nowrap;
 }
-.nav {
-  display: flex;
-  gap: 28px;
-  align-items: center;
-}
+.nav { display: flex; gap: 28px; align-items: center; }
 .nav a {
   font-size: 12px;
   letter-spacing: 0.16em;
@@ -117,7 +111,6 @@ button { font: inherit; color: inherit; }
 }
 .nav a:hover { color: #fff; }
 
-/* Hamburger toggle (hidden on desktop) */
 .menu-toggle {
   display: none;
   width: 40px;
@@ -126,7 +119,6 @@ button { font: inherit; color: inherit; }
   border: none;
   padding: 0;
   cursor: pointer;
-  position: relative;
 }
 .menu-toggle span {
   display: block;
@@ -143,7 +135,7 @@ button { font: inherit; color: inherit; }
 .hero {
   position: relative;
   min-height: 100vh;
-  min-height: 100svh; /* small viewport height for mobile browsers */
+  min-height: 100svh;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -172,7 +164,7 @@ button { font: inherit; color: inherit; }
   object-fit: cover;
 }
 
-/* --- Sliding image layer --- */
+/* --- Sliding images --- */
 .hero__slides {
   position: absolute;
   inset: 0;
@@ -265,25 +257,12 @@ button { font: inherit; color: inherit; }
   border-radius: 0;
   text-decoration: none;
   white-space: nowrap;
-  /* iOS tap target minimum */
   min-height: 48px;
 }
-.btn--primary {
-  background: #fff;
-  color: #0e0e0e;
-  border-color: #fff;
-}
+.btn--primary { background: #fff; color: #0e0e0e; border-color: #fff; }
 .btn--primary:hover { background: transparent; color: #fff; }
-.btn--ghost {
-  background: transparent;
-  color: #fff;
-  border-color: rgba(255,255,255,0.5);
-}
-.btn--ghost:hover {
-  background: #fff;
-  color: #0e0e0e;
-  border-color: #fff;
-}
+.btn--ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,0.5); }
+.btn--ghost:hover { background: #fff; color: #0e0e0e; border-color: #fff; }
 .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
 /* --- Dots --- */
@@ -306,8 +285,6 @@ button { font: inherit; color: inherit; }
   position: relative;
   overflow: hidden;
   transition: background 0.3s ease;
-  /* Bigger tap area without changing look */
-  position: relative;
 }
 .hero__dot::before {
   content: '';
@@ -502,7 +479,7 @@ button { font: inherit; color: inherit; }
 .footer a:hover { color: #fff; }
 
 /* ============================================================
-   RESPONSIVE — TABLET (≤ 960px)
+   TABLET (≤ 960px)
    ============================================================ */
 @media (max-width: 960px) {
   .visit__grid { grid-template-columns: 1fr; }
@@ -512,11 +489,9 @@ button { font: inherit; color: inherit; }
 }
 
 /* ============================================================
-   RESPONSIVE — MOBILE (≤ 720px)
+   MOBILE (≤ 720px)
    ============================================================ */
 @media (max-width: 720px) {
-
-  /* --- Header: collapse nav into a slide-down menu --- */
   .header__inner { padding: 0 20px; }
   .menu-toggle { display: block; }
   .nav {
@@ -549,7 +524,6 @@ button { font: inherit; color: inherit; }
     color: #fff;
   }
 
-  /* --- Hero --- */
   .hero { min-height: 92svh; }
   .hero__content {
     padding-top: calc(96px + var(--safe-top));
@@ -558,7 +532,6 @@ button { font: inherit; color: inherit; }
   .hero__heading { letter-spacing: -0.01em; }
   .hero__sub { margin-bottom: 32px; }
 
-  /* Stack buttons full-width for thumb reach */
   .hero__actions {
     flex-direction: column;
     align-items: stretch;
@@ -567,21 +540,16 @@ button { font: inherit; color: inherit; }
     margin: 0 auto;
   }
   .btn { width: 100%; padding: 18px 24px; }
-
-  /* Dots */
   .hero__dot { width: 28px; }
 
-  /* --- Visit cards --- */
-  .visit__card {
-    padding: 36px 24px;
-  }
+  .visit__card { padding: 36px 24px; }
   .visit__icon { margin-bottom: 18px; }
-  .visit__card:hover { transform: none; } /* disable lift on touch */
+  .visit__card:hover { transform: none; }
   .visit__meta { padding-top: 18px; margin-bottom: 24px; }
 }
 
 /* ============================================================
-   RESPONSIVE — SMALL MOBILE (≤ 420px)
+   SMALL MOBILE (≤ 420px)
    ============================================================ */
 @media (max-width: 420px) {
   .header__inner { padding: 0 16px; }
@@ -594,7 +562,7 @@ button { font: inherit; color: inherit; }
 }
 
 /* ============================================================
-   LANDSCAPE PHONES (short viewport)
+   LANDSCAPE PHONES
    ============================================================ */
 @media (max-height: 520px) and (orientation: landscape) {
   .hero { min-height: 100vh; }
@@ -615,19 +583,10 @@ button { font: inherit; color: inherit; }
   }
   .hero__slide { transition: none; }
 }
-
-/* Focus-visible outlines for keyboard users */
 a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-}
-
-/* ============================================================
-   LARGE SCREENS (≥ 1600px)
-   ============================================================ */
-@media (min-width: 1600px) {
-  .hero__heading { letter-spacing: -0.02em; }
 }
 </style>
 </head>
@@ -639,7 +598,7 @@ button:focus-visible {
      ============================================================ -->
 <header class="header" id="header">
   <div class="header__inner">
-    <a href="#" class="logo">Bussmind Boutique</a>
+    <a href="#" class="logo">Your Boutique</a>
 
     <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-nav">
       <span></span>
@@ -660,7 +619,7 @@ button:focus-visible {
      ============================================================ -->
 <section class="hero" id="hero">
 
-  <!-- VIDEO BACKGROUND -->
+  <!-- VIDEO BACKGROUND (local file) -->
   <div class="hero__video">
     <video
       autoplay
@@ -670,22 +629,22 @@ button:focus-visible {
       webkit-playsinline
       preload="auto"
       disablepictureinpicture
-      poster="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&q=80"
+      poster="images/poster.jpg"
       aria-hidden="true">
-      <source src="https://cdn.coverr.co/videos/coverr-a-woman-walking-in-a-dress-4827/1080p.mp4" type="video/mp4">
+      <source src="video/hero.mp4" type="video/mp4">
     </video>
   </div>
 
-  <!-- SLIDING IMAGES -->
+  <!-- SLIDING IMAGES (local files) -->
   <div class="hero__slides" id="slides">
     <div class="hero__slide active">
-      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=2000&q=80" alt="" width="2000" height="1333">
+      <img src="images/slide-1.jpg" alt="" width="2000" height="1333" loading="eager" fetchpriority="high">
     </div>
     <div class="hero__slide">
-      <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=2000&q=80" alt="" width="2000" height="1333">
+      <img src="images/slide-2.jpg" alt="" width="2000" height="1333" loading="lazy">
     </div>
     <div class="hero__slide">
-      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=2000&q=80" alt="" width="2000" height="1333">
+      <img src="images/slide-3.jpg" alt="" width="2000" height="1333" loading="lazy">
     </div>
   </div>
 
@@ -805,16 +764,13 @@ button:focus-visible {
 <script>
 (function () {
 
-  /* ============================================================
-     HERO SLIDER
-     ============================================================ */
+  /* HERO SLIDER */
   var slides = Array.prototype.slice.call(document.querySelectorAll('.hero__slide'));
   var dotsContainer = document.getElementById('dots');
   var INTERVAL = 6000;
   var current = 0;
   var timer = null;
 
-  // Build dots
   slides.forEach(function (_, i) {
     var dot = document.createElement('button');
     dot.className = 'hero__dot' + (i === 0 ? ' active' : '');
@@ -829,41 +785,31 @@ button:focus-visible {
     if (index === current) return;
     slides[current].classList.remove('active');
     dots[current].classList.remove('active');
-
     current = (index + slides.length) % slides.length;
-
     slides[current].classList.add('active');
     var dot = dots[current];
     dot.classList.remove('active');
-    void dot.offsetWidth; // restart fill animation
+    void dot.offsetWidth;
     dot.classList.add('active');
   }
-
   function next() { goTo(current + 1); }
   function start() { timer = setInterval(next, INTERVAL); }
   function stop()  { clearInterval(timer); }
-
   start();
 
-  // Pause when tab is hidden (saves battery)
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) { stop(); } else { start(); }
   });
 
-  /* ============================================================
-     MOBILE MENU
-     ============================================================ */
+  /* MOBILE MENU */
   var toggle = document.getElementById('menu-toggle');
   var nav = document.getElementById('primary-nav');
-
   if (toggle && nav) {
     toggle.addEventListener('click', function () {
       var open = nav.classList.toggle('open');
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       document.body.style.overflow = open ? 'hidden' : '';
     });
-
-    // Close menu when a link is tapped
     nav.querySelectorAll('a').forEach(function (link) {
       link.addEventListener('click', function () {
         nav.classList.remove('open');
@@ -871,8 +817,6 @@ button:focus-visible {
         document.body.style.overflow = '';
       });
     });
-
-    // Close on Escape
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && nav.classList.contains('open')) {
         nav.classList.remove('open');
@@ -882,51 +826,34 @@ button:focus-visible {
     });
   }
 
-  /* ============================================================
-     HEADER SCROLL STATE
-     ============================================================ */
+  /* HEADER SCROLL */
   var header = document.getElementById('header');
-  var lastY = 0;
   window.addEventListener('scroll', function () {
-    var y = window.scrollY;
-    header.classList.toggle('scrolled', y > 40);
-    lastY = y;
+    header.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
 
-  /* ============================================================
-     VIDEO: pause offscreen, respect data saver & reduced motion
-     ============================================================ */
+  /* VIDEO: pause offscreen & respect reduced motion */
   var video = document.querySelector('.hero__video video');
   var hero = document.querySelector('.hero');
   var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (video) {
-    // Respect user's reduced-motion preference
     if (prefersReduced) {
       video.pause();
       video.removeAttribute('autoplay');
     } else if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            video.play().catch(function () {});
-          } else {
-            video.pause();
-          }
+          if (entry.isIntersecting) { video.play().catch(function () {}); }
+          else { video.pause(); }
         });
       }, { threshold: 0.1 });
       io.observe(hero);
     }
-
-    // Fallback: if video fails to load, hide it (poster/images remain)
-    video.addEventListener('error', function () {
-      video.style.display = 'none';
-    }, true);
+    video.addEventListener('error', function () { video.style.display = 'none'; }, true);
   }
 
-  /* ============================================================
-     VIEWPORT HEIGHT FIX (for older mobile browsers)
-     ============================================================ */
+  /* VIEWPORT HEIGHT FIX */
   function setVH() {
     document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
   }
