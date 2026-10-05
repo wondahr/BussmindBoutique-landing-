@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0e0e0e">
 <title>Your Boutique — Visit Us Online or In-Store</title>
 <meta name="description" content="Timeless pieces, thoughtfully made. Shop online or visit our boutique.">
 
@@ -17,6 +18,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
+/* ============================================================
+   BRAND TOKENS
+   ============================================================ */
 :root {
   --bg:         #0e0e0e;
   --text:       #ffffff;
@@ -25,9 +29,16 @@
   --max-width:  1300px;
   --font-head:  'Playfair Display', Georgia, serif;
   --font-body:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Safe area for notched phones */
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* ============================================================
+   RESET
+   ============================================================ */
 *, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
 html, body { margin: 0; padding: 0; }
 body {
   background: var(--bg);
@@ -36,9 +47,26 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent tap highlight on mobile */
+  -webkit-tap-highlight-color: transparent;
 }
-img, video { display: block; max-width: 100%; }
+img, video { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; }
+
+/* ============================================================
+   FLUID SCALING UTILITY
+   ============================================================ */
+:root {
+  /* Fluid type scale using clamp() */
+  --fs-hero:    clamp(34px, 7.2vw, 88px);
+  --fs-section: clamp(26px, 4.4vw, 52px);
+  --fs-card:    clamp(22px, 3vw, 32px);
+  --fs-body:    clamp(14px, 1.15vw, 17px);
+  --fs-small:   clamp(11px, 0.85vw, 13px);
+  --fs-eyebrow: clamp(10px, 0.8vw, 12px);
+}
 
 /* ============================================================
    FIXED HEADER
@@ -47,14 +75,15 @@ a { color: inherit; text-decoration: none; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  padding: 24px 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+  padding: calc(20px + var(--safe-top)) 0 20px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 100%);
   transition: background 0.3s ease, padding 0.3s ease;
 }
 .header.scrolled {
-  background: rgba(14,14,14,0.92);
+  background: rgba(14,14,14,0.94);
   backdrop-filter: blur(10px);
-  padding: 16px 0;
+  -webkit-backdrop-filter: blur(10px);
+  padding: calc(14px + var(--safe-top)) 0 14px;
 }
 .header__inner {
   max-width: var(--max-width);
@@ -63,15 +92,20 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 20px;
 }
 .logo {
   font-family: var(--font-head);
-  font-size: 22px;
+  font-size: clamp(18px, 2vw, 22px);
   font-weight: 500;
   letter-spacing: 0.04em;
+  white-space: nowrap;
 }
-.nav { display: flex; gap: 32px; }
+.nav {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
 .nav a {
   font-size: 12px;
   letter-spacing: 0.16em;
@@ -79,21 +113,43 @@ a { color: inherit; text-decoration: none; }
   font-weight: 400;
   color: var(--muted);
   transition: color 0.25s ease;
+  padding: 6px 0;
 }
 .nav a:hover { color: #fff; }
+
+/* Hamburger toggle (hidden on desktop) */
+.menu-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+}
+.menu-toggle span {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: #fff;
+  margin: 5px auto;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
 
 /* ============================================================
    HERO
    ============================================================ */
 .hero {
   position: relative;
-  height: 100vh;
-  min-height: 640px;
+  min-height: 100vh;
+  min-height: 100svh; /* small viewport height for mobile browsers */
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+  isolation: isolate;
 }
 
 /* --- Video background --- */
@@ -102,14 +158,21 @@ a { color: inherit; text-decoration: none; }
   inset: 0;
   z-index: 0;
   overflow: hidden;
+  background: #000;
 }
 .hero__video video {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
   object-fit: cover;
 }
 
-/* --- Sliding image layer (sits over video, cross-fades) --- */
+/* --- Sliding image layer --- */
 .hero__slides {
   position: absolute;
   inset: 0;
@@ -129,13 +192,17 @@ a { color: inherit; text-decoration: none; }
   object-fit: cover;
 }
 
-/* --- Dark gradient overlay for text legibility --- */
+/* --- Overlay --- */
 .hero__overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
   background:
-    linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.65) 100%);
+    linear-gradient(180deg,
+      rgba(0,0,0,0.4) 0%,
+      rgba(0,0,0,0.15) 35%,
+      rgba(0,0,0,0.55) 75%,
+      rgba(0,0,0,0.75) 100%);
 }
 
 /* --- Hero content --- */
@@ -143,34 +210,39 @@ a { color: inherit; text-decoration: none; }
   position: relative;
   z-index: 3;
   max-width: 900px;
+  width: 100%;
   padding: 0 24px;
+  padding-top: calc(80px + var(--safe-top));
+  padding-bottom: calc(80px + var(--safe-bottom));
 }
 .eyebrow {
-  font-size: 11px;
+  font-size: var(--fs-eyebrow);
   letter-spacing: 0.32em;
   text-transform: uppercase;
   font-weight: 400;
   color: var(--accent);
-  margin: 0 0 24px;
+  margin: 0 0 20px;
 }
 .hero__heading {
   font-family: var(--font-head);
-  font-size: clamp(40px, 7vw, 88px);
+  font-size: var(--fs-hero);
   font-weight: 400;
   line-height: 1.05;
   letter-spacing: -0.015em;
-  margin: 0 0 24px;
+  margin: 0 0 22px;
+  text-wrap: balance;
 }
 .hero__sub {
-  font-size: clamp(15px, 1.2vw, 18px);
+  font-size: var(--fs-body);
   font-weight: 300;
   color: var(--muted);
   max-width: 520px;
-  margin: 0 auto 44px;
+  margin: 0 auto 36px;
+  text-wrap: pretty;
 }
 .hero__actions {
   display: flex;
-  gap: 16px;
+  gap: 14px;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -179,8 +251,9 @@ a { color: inherit; text-decoration: none; }
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  padding: 18px 36px;
+  padding: 17px 32px;
   font-family: var(--font-body);
   font-size: 11px;
   font-weight: 500;
@@ -191,16 +264,16 @@ a { color: inherit; text-decoration: none; }
   transition: all 0.3s ease;
   border-radius: 0;
   text-decoration: none;
+  white-space: nowrap;
+  /* iOS tap target minimum */
+  min-height: 48px;
 }
 .btn--primary {
   background: #fff;
   color: #0e0e0e;
   border-color: #fff;
 }
-.btn--primary:hover {
-  background: transparent;
-  color: #fff;
-}
+.btn--primary:hover { background: transparent; color: #fff; }
 .btn--ghost {
   background: transparent;
   color: #fff;
@@ -211,24 +284,20 @@ a { color: inherit; text-decoration: none; }
   color: #0e0e0e;
   border-color: #fff;
 }
-.btn svg {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-}
+.btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
-/* --- Slide indicators (dots) --- */
+/* --- Dots --- */
 .hero__dots {
   position: absolute;
-  bottom: 40px;
+  bottom: calc(32px + var(--safe-bottom));
   left: 50%;
   transform: translateX(-50%);
   z-index: 4;
   display: flex;
-  gap: 12px;
+  gap: 10px;
 }
 .hero__dot {
-  width: 36px;
+  width: 34px;
   height: 2px;
   background: rgba(255,255,255,0.35);
   border: none;
@@ -237,6 +306,13 @@ a { color: inherit; text-decoration: none; }
   position: relative;
   overflow: hidden;
   transition: background 0.3s ease;
+  /* Bigger tap area without changing look */
+  position: relative;
+}
+.hero__dot::before {
+  content: '';
+  position: absolute;
+  inset: -18px -4px;
 }
 .hero__dot:hover { background: rgba(255,255,255,0.6); }
 .hero__dot.active { background: rgba(255,255,255,0.35); }
@@ -256,7 +332,7 @@ a { color: inherit; text-decoration: none; }
 /* --- Scroll hint --- */
 .scroll-hint {
   position: absolute;
-  bottom: 36px;
+  bottom: calc(36px + var(--safe-bottom));
   right: 40px;
   z-index: 4;
   writing-mode: vertical-rl;
@@ -280,10 +356,10 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ============================================================
-   VISIT SECTION (Online + In-Store)
+   VISIT SECTION
    ============================================================ */
 .visit {
-  padding: 120px 0;
+  padding: clamp(72px, 9vw, 120px) 0;
   background: #0e0e0e;
 }
 .visit__inner {
@@ -293,34 +369,37 @@ a { color: inherit; text-decoration: none; }
 }
 .visit__heading {
   font-family: var(--font-head);
-  font-size: clamp(32px, 4vw, 52px);
+  font-size: var(--fs-section);
   font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.01em;
   text-align: center;
-  margin: 0 0 16px;
+  margin: 0 0 14px;
+  text-wrap: balance;
 }
 .visit__sub {
   text-align: center;
   color: var(--muted);
-  font-size: 16px;
+  font-size: var(--fs-body);
   max-width: 520px;
-  margin: 0 auto 72px;
+  margin: 0 auto clamp(48px, 6vw, 72px);
 }
 .visit__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  gap: clamp(20px, 2.5vw, 32px);
 }
 .visit__card {
   position: relative;
-  padding: 64px 48px;
+  padding: clamp(36px, 4.5vw, 64px) clamp(28px, 3.5vw, 48px);
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.02);
   text-decoration: none;
   color: inherit;
   transition: all 0.4s ease;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .visit__card::before {
   content: '';
@@ -329,6 +408,7 @@ a { color: inherit; text-decoration: none; }
   background: linear-gradient(135deg, rgba(201,168,119,0.08) 0%, rgba(201,168,119,0) 60%);
   opacity: 0;
   transition: opacity 0.4s ease;
+  pointer-events: none;
 }
 .visit__card:hover {
   border-color: var(--accent);
@@ -338,49 +418,47 @@ a { color: inherit; text-decoration: none; }
 .visit__card > * { position: relative; z-index: 1; }
 
 .visit__icon {
-  width: 48px;
-  height: 48px;
+  width: clamp(38px, 3.5vw, 48px);
+  height: clamp(38px, 3.5vw, 48px);
   color: var(--accent);
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 .visit__icon svg { width: 100%; height: 100%; }
 
 .visit__label {
-  font-size: 11px;
+  font-size: var(--fs-eyebrow);
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--accent);
-  margin: 0 0 16px;
+  margin: 0 0 14px;
 }
 .visit__title {
   font-family: var(--font-head);
-  font-size: 32px;
+  font-size: var(--fs-card);
   font-weight: 400;
   line-height: 1.15;
-  margin: 0 0 16px;
+  margin: 0 0 14px;
+  text-wrap: balance;
 }
 .visit__text {
   color: var(--muted);
-  font-size: 15px;
+  font-size: var(--fs-body);
   line-height: 1.7;
-  margin: 0 0 32px;
+  margin: 0 0 28px;
   max-width: 380px;
 }
 .visit__meta {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 13px;
+  font-size: var(--fs-small);
   color: var(--muted);
-  margin-bottom: 32px;
-  padding-top: 24px;
+  margin-bottom: 28px;
+  padding-top: 22px;
   border-top: 1px solid rgba(255,255,255,0.1);
 }
-.visit__meta strong {
-  color: #fff;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
+.visit__meta strong { color: #fff; font-weight: 500; }
+
 .visit__arrow {
   display: inline-flex;
   align-items: center;
@@ -390,6 +468,8 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
   color: #fff;
   font-weight: 500;
+  margin-top: auto;
+  padding-top: 8px;
 }
 .visit__arrow svg {
   width: 20px;
@@ -402,34 +482,152 @@ a { color: inherit; text-decoration: none; }
    FOOTER
    ============================================================ */
 .footer {
-  padding: 48px 0 40px;
+  padding: 44px 24px calc(36px + var(--safe-bottom));
   border-top: 1px solid rgba(255,255,255,0.08);
   text-align: center;
-  font-size: 12px;
+  font-size: var(--fs-small);
   color: var(--muted);
   letter-spacing: 0.06em;
   background: #0e0e0e;
 }
-.footer a { color: var(--muted); margin: 0 12px; transition: color 0.2s ease; }
+.footer p { margin: 0; }
+.footer p + p { margin-top: 14px; }
+.footer a {
+  color: var(--muted);
+  margin: 0 10px;
+  transition: color 0.2s ease;
+  display: inline-block;
+  padding: 4px 0;
+}
 .footer a:hover { color: #fff; }
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE — TABLET (≤ 960px)
    ============================================================ */
-@media (max-width: 900px) {
-  .nav { display: none; }
+@media (max-width: 960px) {
   .visit__grid { grid-template-columns: 1fr; }
-  .visit { padding: 88px 0; }
+  .visit__text { max-width: none; }
   .visit__card { padding: 48px 32px; }
   .scroll-hint { display: none; }
 }
-@media (max-width: 560px) {
-  .header { padding: 18px 0; }
+
+/* ============================================================
+   RESPONSIVE — MOBILE (≤ 720px)
+   ============================================================ */
+@media (max-width: 720px) {
+
+  /* --- Header: collapse nav into a slide-down menu --- */
+  .header__inner { padding: 0 20px; }
+  .menu-toggle { display: block; }
+  .nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    height: 100svh;
+    width: min(78vw, 320px);
+    background: rgba(14,14,14,0.98);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+    padding: calc(88px + var(--safe-top)) 32px 32px;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.22, 0.9, 0.35, 1);
+    border-left: 1px solid rgba(255,255,255,0.08);
+    z-index: 99;
+  }
+  .nav.open { transform: translateX(0); }
+  .nav a {
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    padding: 16px 0;
+    width: 100%;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: #fff;
+  }
+
+  /* --- Hero --- */
+  .hero { min-height: 92svh; }
+  .hero__content {
+    padding-top: calc(96px + var(--safe-top));
+    padding-bottom: calc(96px + var(--safe-bottom));
+  }
+  .hero__heading { letter-spacing: -0.01em; }
+  .hero__sub { margin-bottom: 32px; }
+
+  /* Stack buttons full-width for thumb reach */
+  .hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  .btn { width: 100%; padding: 18px 24px; }
+
+  /* Dots */
+  .hero__dot { width: 28px; }
+
+  /* --- Visit cards --- */
+  .visit__card {
+    padding: 36px 24px;
+  }
+  .visit__icon { margin-bottom: 18px; }
+  .visit__card:hover { transform: none; } /* disable lift on touch */
+  .visit__meta { padding-top: 18px; margin-bottom: 24px; }
+}
+
+/* ============================================================
+   RESPONSIVE — SMALL MOBILE (≤ 420px)
+   ============================================================ */
+@media (max-width: 420px) {
+  .header__inner { padding: 0 16px; }
+  .hero__content { padding-left: 20px; padding-right: 20px; }
+  .eyebrow { letter-spacing: 0.24em; margin-bottom: 16px; }
+  .hero__sub { font-size: 14px; }
+  .visit__inner { padding: 0 18px; }
+  .visit__card { padding: 32px 22px; }
+  .footer a { margin: 0 8px; }
+}
+
+/* ============================================================
+   LANDSCAPE PHONES (short viewport)
+   ============================================================ */
+@media (max-height: 520px) and (orientation: landscape) {
   .hero { min-height: 100vh; }
-  .hero__actions { flex-direction: column; width: 100%; }
-  .btn { width: 100%; justify-content: center; padding: 18px 24px; }
-  .hero__dots { bottom: 28px; }
-  .hero__dot { width: 24px; }
+  .hero__content { padding-top: 72px; padding-bottom: 72px; }
+  .hero__heading { font-size: clamp(28px, 5vw, 40px); }
+  .hero__sub { display: none; }
+  .hero__dots { display: none; }
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .hero__slide { transition: none; }
+}
+
+/* Focus-visible outlines for keyboard users */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   LARGE SCREENS (≥ 1600px)
+   ============================================================ */
+@media (min-width: 1600px) {
+  .hero__heading { letter-spacing: -0.02em; }
 }
 </style>
 </head>
@@ -442,7 +640,14 @@ a { color: inherit; text-decoration: none; }
 <header class="header" id="header">
   <div class="header__inner">
     <a href="#" class="logo">Your Boutique</a>
-    <nav class="nav">
+
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="nav" id="primary-nav">
       <a href="#visit">Visit</a>
       <a href="#visit">Shop</a>
       <a href="#visit">Contact</a>
@@ -451,52 +656,53 @@ a { color: inherit; text-decoration: none; }
 </header>
 
 <!-- ============================================================
-     HERO — Video background + sliding images
+     HERO
      ============================================================ -->
 <section class="hero" id="hero">
 
-  <!-- VIDEO LAYER (plays behind everything) -->
+  <!-- VIDEO BACKGROUND -->
   <div class="hero__video">
     <video
       autoplay
       muted
       loop
       playsinline
+      webkit-playsinline
       preload="auto"
-      poster="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=2000&q=80"
+      disablepictureinpicture
+      poster="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&q=80"
       aria-hidden="true">
-      <!-- Replace with your own video file -->
       <source src="https://cdn.coverr.co/videos/coverr-a-woman-walking-in-a-dress-4827/1080p.mp4" type="video/mp4">
     </video>
   </div>
 
-  <!-- SLIDING IMAGE LAYER (cross-fades over the video) -->
+  <!-- SLIDING IMAGES -->
   <div class="hero__slides" id="slides">
     <div class="hero__slide active">
-      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=2000&q=80" alt="Collection look 1">
+      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=2000&q=80" alt="" width="2000" height="1333">
     </div>
     <div class="hero__slide">
-      <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=2000&q=80" alt="Collection look 2">
+      <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=2000&q=80" alt="" width="2000" height="1333">
     </div>
     <div class="hero__slide">
-      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=2000&q=80" alt="Collection look 3">
+      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=2000&q=80" alt="" width="2000" height="1333">
     </div>
   </div>
 
-  <!-- DARK OVERLAY -->
+  <!-- OVERLAY -->
   <div class="hero__overlay"></div>
 
   <!-- CONTENT -->
   <div class="hero__content">
     <p class="eyebrow">New Collection · Autumn 2026</p>
-    <h1 class="hero__heading">Timeless pieces,<br>thoughtfully made</h1>
+    <h1 class="hero__heading">Timeless pieces, thoughtfully made</h1>
     <p class="hero__sub">Elevated essentials for the modern wardrobe — crafted in small batches, made to last.</p>
 
     <div class="hero__actions">
       <!-- ⚠️ Replace href with your Shopify store URL -->
       <a href="https://your-store.myshopify.com" class="btn btn--primary">
         Shop Online
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="5" y1="12" x2="19" y2="12"/>
           <polyline points="12 5 19 12 12 19"/>
         </svg>
@@ -505,7 +711,7 @@ a { color: inherit; text-decoration: none; }
       <!-- ⚠️ Replace href with your Google Maps link -->
       <a href="https://maps.google.com/?q=Your+Boutique+Address" target="_blank" rel="noopener" class="btn btn--ghost">
         Visit Boutique
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
           <circle cx="12" cy="10" r="3"/>
         </svg>
@@ -513,15 +719,12 @@ a { color: inherit; text-decoration: none; }
     </div>
   </div>
 
-  <!-- SLIDE DOTS -->
   <div class="hero__dots" id="dots" role="tablist" aria-label="Hero slides"></div>
-
-  <!-- SCROLL HINT -->
   <div class="scroll-hint" aria-hidden="true">Scroll</div>
 </section>
 
 <!-- ============================================================
-     VISIT SECTION — Online Store + Physical Store
+     VISIT SECTION
      ============================================================ -->
 <section class="visit" id="visit">
   <div class="visit__inner">
@@ -530,11 +733,10 @@ a { color: inherit; text-decoration: none; }
 
     <div class="visit__grid">
 
-      <!-- CARD 1: ONLINE STORE -->
-      <!-- ⚠️ Replace href with your Shopify store URL -->
+      <!-- ONLINE STORE -->
       <a href="https://your-store.myshopify.com" class="visit__card" target="_blank" rel="noopener">
         <div class="visit__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
             <line x1="3" y1="6" x2="21" y2="6"/>
             <path d="M16 10a4 4 0 0 1-8 0"/>
@@ -549,18 +751,17 @@ a { color: inherit; text-decoration: none; }
         </div>
         <span class="visit__arrow">
           Shop Now
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="5" y1="12" x2="19" y2="12"/>
             <polyline points="12 5 19 12 12 19"/>
           </svg>
         </span>
       </a>
 
-      <!-- CARD 2: PHYSICAL STORE -->
-      <!-- ⚠️ Replace href with your Google Maps link -->
+      <!-- PHYSICAL STORE -->
       <a href="https://maps.google.com/?q=Your+Boutique+Address" class="visit__card" target="_blank" rel="noopener">
         <div class="visit__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
             <polyline points="9 22 9 12 15 12 15 22"/>
           </svg>
@@ -575,7 +776,7 @@ a { color: inherit; text-decoration: none; }
         </div>
         <span class="visit__arrow">
           Get Directions
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="5" y1="12" x2="19" y2="12"/>
             <polyline points="12 5 19 12 12 19"/>
           </svg>
@@ -591,7 +792,7 @@ a { color: inherit; text-decoration: none; }
      ============================================================ -->
 <footer class="footer">
   <p>© 2026 Your Boutique · All rights reserved</p>
-  <p style="margin-top: 14px;">
+  <p>
     <a href="#">Privacy</a>
     <a href="#">Terms</a>
     <a href="#">Shipping</a>
@@ -604,22 +805,25 @@ a { color: inherit; text-decoration: none; }
 <script>
 (function () {
 
-  /* ---------- Hero image slider ---------- */
-  const slides = Array.from(document.querySelectorAll('.hero__slide'));
-  const dotsContainer = document.getElementById('dots');
-  const INTERVAL = 6000; // ms per slide
-  let current = 0;
-  let timer = null;
+  /* ============================================================
+     HERO SLIDER
+     ============================================================ */
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.hero__slide'));
+  var dotsContainer = document.getElementById('dots');
+  var INTERVAL = 6000;
+  var current = 0;
+  var timer = null;
 
   // Build dots
-  slides.forEach((_, i) => {
-    const dot = document.createElement('button');
+  slides.forEach(function (_, i) {
+    var dot = document.createElement('button');
     dot.className = 'hero__dot' + (i === 0 ? ' active' : '');
     dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
-    dot.addEventListener('click', () => goTo(i));
+    dot.setAttribute('role', 'tab');
+    dot.addEventListener('click', function () { goTo(i); });
     dotsContainer.appendChild(dot);
   });
-  const dots = Array.from(dotsContainer.children);
+  var dots = Array.prototype.slice.call(dotsContainer.children);
 
   function goTo(index) {
     if (index === current) return;
@@ -629,49 +833,109 @@ a { color: inherit; text-decoration: none; }
     current = (index + slides.length) % slides.length;
 
     slides[current].classList.add('active');
-    // Re-trigger the dot fill animation
-    const dot = dots[current];
+    var dot = dots[current];
     dot.classList.remove('active');
-    void dot.offsetWidth; // force reflow
+    void dot.offsetWidth; // restart fill animation
     dot.classList.add('active');
   }
 
   function next() { goTo(current + 1); }
-
   function start() { timer = setInterval(next, INTERVAL); }
   function stop()  { clearInterval(timer); }
 
   start();
 
-  // Pause when tab is hidden
-  document.addEventListener('visibilitychange', () => {
-    document.hidden ? stop() : start();
+  // Pause when tab is hidden (saves battery)
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { stop(); } else { start(); }
   });
 
-  /* ---------- Header background on scroll ---------- */
-  const header = document.getElementById('header');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 40);
+  /* ============================================================
+     MOBILE MENU
+     ============================================================ */
+  var toggle = document.getElementById('menu-toggle');
+  var nav = document.getElementById('primary-nav');
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+
+    // Close menu when a link is tapped
+    nav.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && nav.classList.contains('open')) {
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
+  /* ============================================================
+     HEADER SCROLL STATE
+     ============================================================ */
+  var header = document.getElementById('header');
+  var lastY = 0;
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY;
+    header.classList.toggle('scrolled', y > 40);
+    lastY = y;
   }, { passive: true });
 
-  /* ---------- Pause hero video when scrolled away (perf) ---------- */
-  const video = document.querySelector('.hero__video video');
-  const hero = document.querySelector('.hero');
-  if (video && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      });
-    }, { threshold: 0.1 });
-    io.observe(hero);
+  /* ============================================================
+     VIDEO: pause offscreen, respect data saver & reduced motion
+     ============================================================ */
+  var video = document.querySelector('.hero__video video');
+  var hero = document.querySelector('.hero');
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (video) {
+    // Respect user's reduced-motion preference
+    if (prefersReduced) {
+      video.pause();
+      video.removeAttribute('autoplay');
+    } else if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            video.play().catch(function () {});
+          } else {
+            video.pause();
+          }
+        });
+      }, { threshold: 0.1 });
+      io.observe(hero);
+    }
+
+    // Fallback: if video fails to load, hide it (poster/images remain)
+    video.addEventListener('error', function () {
+      video.style.display = 'none';
+    }, true);
   }
+
+  /* ============================================================
+     VIEWPORT HEIGHT FIX (for older mobile browsers)
+     ============================================================ */
+  function setVH() {
+    document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+  }
+  setVH();
+  window.addEventListener('resize', setVH, { passive: true });
+  window.addEventListener('orientationchange', setVH);
 
 })();
 </script>
 
 </body>
-  </html>
+</html>
